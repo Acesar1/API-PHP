@@ -1,6 +1,32 @@
 <?php 
+function getAddres () {
+   
 
-    $addres = (object) [
+    if ( isset ($_POST['cep'])){
+        $cep = $_POST['cep'];
+
+        $cep = filterCep ($cep);
+
+        if ( isCep($cep) ){
+            $addres = getAddresViaCep($cep);
+            if(property_exists($addres,'erro')){
+                $addres = addresEmpty();
+                $addres->cep = 'CEP não encontrado';   
+            }
+        
+        } else{
+            $addres = addresEmpty();
+            $addres->cep = 'CEP inválido';
+        }    
+    }else{
+        $addres = addresEmpty();
+    }  
+    
+    return $addres;
+}
+
+function addresEmpty () {
+    return (object) [
         'cep' => '',
         'logradouro' => '',
         'bairro' => '',
@@ -8,15 +34,24 @@
         'uf' => ''
     ];
 
-    if ( isset ($_POST['cep'])){
-        $cep = $_POST['cep'];
+}
 
-        $cep = preg_replace('/[^0-9]/','',$cep);
 
-    if ( preg_match('/^[0-9]{5}-?[0-9]{3}$/',$cep) ){
-        $url = "http://viacep.com.br/ws/{$cep}/json/";
+function filterCep ($cep){
+   return preg_replace('/[^0-9]/','',$cep);
+}
 
-        $addres = json_decode(file_get_contents($url));
-        }
 
-    }   
+function isCep ($cep){
+    return preg_match('/^[0-9]{5}-?[0-9]{3}$/',$cep);
+}
+
+
+function getAddresViaCep ( $cep){
+
+    $url = "http://viacep.com.br/ws/{$cep}/json/";
+
+    var_dump (json_decode(file_get_contents($url)));
+    return  json_decode(file_get_contents($url));
+
+}  
