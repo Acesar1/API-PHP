@@ -1,5 +1,6 @@
 <?php
     include_once ('viacep.php');
+    $addres = getAddres();
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
