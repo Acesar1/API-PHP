@@ -1,24 +1,35 @@
 <?php
-    include_once ('postmon.php');
-    $address = getAddress();
+
+//conexao como banco de dados//
+
+$conn = new mysqli('localhost', 'root','','cadastro');  
+
+//CRUD//
+
+
+
+//CRIAR UM REGISTRO NA TABELA//
+
+// $sql = "INSERT INTO Clientes VALUES('','AUGUSTO', 'PEDRO@GMAIL.COM', 'SAO ROQUE', 'SP')";
+// $conn->query($sql);
+
+//LER UMA TABELA//
+
+$sql = 'SELECT * FROM Clientes';
+$result = $conn->query($sql);
+
+//ATUALIZANDO UM REGISTRO NA TABELA//
+
+$sql = "UPDATE Clientes SET nome = 'ROGER' WHERE nome = 'MARTA'";
+$conn->query($sql);
+
+//DELETAR UM REGISTRO DA TABELA//
+$sql = "DELETE FROM Clientes WHERE id = 4";
+$conn->query($sql);
+
+while($rs = $result->fetch_object()) {
+
+    var_dump($rs);
+}
+
 ?>
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consumindo API</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <form action="." method="post">
-        <p>Digite o CEP para encontrar o endereço.</p>
-        <input type="text" placeholder="Digite um cep..." name="cep" value="<?php echo $address->cep?>">
-        <input type="submit"><br>
-        <input type="text" placeholder="rua" name="rua" value="<?php echo $address->logradouro?>"><br>
-        <input type="text" placeholder="bairro" name="bairro" value="<?php echo $address->bairro?>"><br>
-        <input type="text" placeholder="cidade" name="cidade" value="<?php echo isset($address->localidade) ? $address->localidade : $address->cidade?>"><br>
-        <input type="text" placeholder="estado" name="estado" value="<?php echo isset($address->uf) ? $address->uf : $address->estado?>"><br>
-    </form>
-</body>
-</html>
